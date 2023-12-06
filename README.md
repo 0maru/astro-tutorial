@@ -180,3 +180,31 @@ const buttonLabels: string[] = ["ボタン1", "ボタン2", "ボタン3"];
  </body>
 </html>
 ```
+
+## 8. ページを追加する
+
+src/pages にファイルを追加することでページを使いできる
+
+`.astro`, `.md`, `.mdx`, `.html` の拡張子に対応している
+
+pages/ の下に`about.astro` を作成する
+
+```:html
+---
+
+---
+<html lang="en">
+ <head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="generator" content={Astro.generator} />
+  <title>Astro</title>
+ </head>
+ <body>
+  <h1>私について</h1>
+ </body>
+</html>
+```
+
+<http://localhost:4321/about> にアクセスするとページが作成されていることが確認できる
