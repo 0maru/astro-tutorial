@@ -63,3 +63,30 @@ pages/index.astro を開く
 
 1. components ディレクトリを作成
 2. Button.astro を作成
+
+```html
+---
+
+---
+<button>
+    送信
+</button>
+```
+
+3. JavaScriptを実行できるようにする
+
+```:html
+---
+
+---
+<button submit-button>
+    送信
+</button>
+
+<script>
+    const button = document.querySelector('[submit-button]');
+    button.addEventListener('click', () => {
+        alert('送信しました');
+    });
+</script>
+```
