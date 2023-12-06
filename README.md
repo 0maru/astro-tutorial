@@ -73,7 +73,30 @@ pages/index.astro を開く
 </button>
 ```
 
-3. JavaScriptを実行できるようにする
+3. index.astro で作成したボタンを読み込む
+
+```:html
+---
+import Button from "../components/Button.astro";
+---
+
+<html lang="en">
+ <head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="generator" content={Astro.generator} />
+  <title>Astro</title>
+ </head>
+ <body>
+  <h1>ブログ</h1>
+  <Button>
+ </body>
+</html>
+
+```
+
+4. JavaScriptを実行できるようにする
 
 ```:html
 ---
@@ -89,4 +112,66 @@ pages/index.astro を開く
         alert('送信しました');
     });
 </script>
+```
+
+## 7. JSXを使う
+
+「6. コンポーネントを作成する」で作成したボタンが props を受け取れるようにする
+
+```:html
+---
+interface ButtonProps {
+    index: number;
+    label: string;
+}
+
+const { index, label } = Astro.props;
+---
+<!-- data属性にprops の値を渡すことでscript 内で使用できるようになる -->
+<submit-button data-label={label}>
+    <button>
+        {label}
+    </button>
+</submit-button>
+
+<script>
+    class SubmitButton extends HTMLElement {
+        constructor() {
+            super();
+
+            const button = this.querySelector('button');
+            // this.dataset で data属性の値を取得できる
+            const label = this.dataset.label
+            button.addEventListener('click', () => {
+                alert(`「${label}」ボタンがクリックされました`);
+            });
+        }
+    }
+    // submit-button タグに SubmitButton クラスを紐付ける
+    customElements.define('submit-button', SubmitButton);
+</script>
+```
+
+pages/index.astro にJSXでボタンを複数個表示できるようにする
+
+```:html
+---
+import Button from "../components/Button.astro";
+
+const buttonLabels: string[] = ["ボタン1", "ボタン2", "ボタン3"];
+---
+
+<html lang="en">
+ <head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="generator" content={Astro.generator} />
+  <title>Astro</title>
+ </head>
+ <body>
+  <h1>ブログ</h1>
+  {buttonLabels.map((label, idx) => <Button index={idx} label={label} />)}
+ </body>
+</html>
 ```

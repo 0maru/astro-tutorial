@@ -1,5 +1,7 @@
 ---
 import Button from "../components/Button.astro";
+
+const buttonLabels: string[] = ["ボタン1", "ボタン2", "ボタン3"];
 ---
 
 <html lang="en">
@@ -12,6 +14,6 @@ import Button from "../components/Button.astro";
 	</head>
 	<body>
 		<h1>ブログ</h1>
-		<Button />
+		{buttonLabels.map((label, idx) => <Button index={idx} label={label} />)}
 	</body>
 </html>

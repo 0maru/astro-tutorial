@@ -1,13 +1,31 @@
 ---
+interface ButtonProps {
+    index: number;
+    label: string;
+}
 
+const { index, label } = Astro.props;
 ---
-<button submit-button>
-    送信
-</button>
+<!-- data属性にprops の値を渡すことでscript 内で使用できるようになる -->
+<submit-button data-label={label}>
+    <button>
+        {label}
+    </button>
+</submit-button>
 
 <script>
-    const button = document.querySelector('[submit-button]');
-    button.addEventListener('click', () => {
-        alert('送信しました');
-    });
+    class SubmitButton extends HTMLElement {
+        constructor() {
+            super();
+
+            const button = this.querySelector('button');
+            // this.dataset で data属性の値を取得できる
+            const label = this.dataset.label
+            button.addEventListener('click', () => {
+                alert(`「${label}」ボタンがクリックされました`);
+            });
+        }
+    }
+    // submit-button タグに SubmitButton クラスを紐付ける
+    customElements.define('submit-button', SubmitButton);
 </script>
