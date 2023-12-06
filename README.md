@@ -117,6 +117,11 @@ import Button from "../components/Button.astro";
 ## 7. JSXを使う
 
 「6. コンポーネントを作成する」で作成したボタンが props を受け取れるようにする
+「6. コンポーネントを作成する」で作ったボタンだと同じdata属性のボタンが複数個生成されてどのボタンを押したか分からなくなるので、
+別の方法でクリックされたボタンを特定できるようにする。
+
+WebComponents をカスタム要素を使用することで、`document.querySelector()`だと`document`のすべてのDOMが検索対象だが、
+`this.querySelector()` で個別にコンポーネントを操作することができる。
 
 ```:html
 ---
