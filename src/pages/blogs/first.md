@@ -1,5 +1,6 @@
 ---
 title: 初めてのブログ
+layout: ../../layouts/Blog.astro
 ---
 
 # 初めてのブログ

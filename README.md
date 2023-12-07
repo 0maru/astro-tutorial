@@ -251,3 +251,36 @@ title: 初めてのブログ
 ```
 
 <http://localhost:4321/blogs/first> にアクセスする
+
+## 11. レイアウトを作成する
+
+`src` の下に `layouts` ディレクトリを作成する。
+import して使用するのでディレクトリ名に制限はない。
+
+作成した`layouts` ディレクトリの下に `Blog.astro` を作成する。
+
+```:html
+---
+interface Props {
+  frontmatter: {
+    title: string;
+    description: string;
+    createdAt: string;
+  };
+}
+
+const { frontmatter } = Astro.props;
+---
+<!doctype html>
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
+```
+
