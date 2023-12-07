@@ -1,6 +1,7 @@
 ---
 title: 初めてのブログ
 layout: ../../layouts/Blog.astro
+tags: ['Tech', 'Astro']
 ---
 
 # 初めてのブログ

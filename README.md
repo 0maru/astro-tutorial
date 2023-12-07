@@ -21,10 +21,7 @@ Install dependencies?
 >> Yes
 
 Do you plan to write TypeScript?
->> yes
-
-How strict should TypeScript be?
->> Strict
+>> No
 
 Initialize a new git repository?
 >> No
@@ -284,3 +281,210 @@ const { frontmatter } = Astro.props;
 </html>
 ```
 
+## 12. トップページにブログ記事一覧を表示する
+
+```:html
+---
+const allBlogs = await Astro.glob("../pages/blogs/*.md");
+---
+
+<html lang="en">
+ <head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="generator" content={Astro.generator} />
+  <title>Astro</title>
+ </head>
+ <body>
+  <h1>ブログ</h1>
+  {
+   allBlogs.map((blog, idx) => {
+    return <p>{blog.frontmatter.title}</p>;
+   })
+  }
+ </body>
+</html>
+```
+
+2つ目のブログ記事を追加する
+
+```:markdown
+---
+title: 2つ目の記事
+layout: ../../layouts/Blog.astro
+---
+
+# 2つ目の記事
+
+2つ目の記事です。
+
+```
+
+トップページに2つめの記事が表示される
+
+## 13. 記事のページに遷移できるようにする
+
+pタグをaタグに変更して遷移できるようにする
+
+```:html
+---
+const allBlogs = await Astro.glob("../pages/blogs/*.md");
+---
+
+<html lang="en">
+ <head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="generator" content={Astro.generator} />
+  <title>Astro</title>
+ </head>
+ <body>
+  <h1>ブログ</h1>
+  {
+   allBlogs.map((blog) => {
+    return <a href={blog.url} style="display: block">{blog.frontmatter.title}</a>;
+   })
+  }
+ </body>
+</html>
+```
+
+## 14. ブログ記事にタグを追加してタグ一覧ページを作成する
+
+`fisrt.md` にタグを追加する
+
+```:markdown
+---
+title: 初めてのブログ
+layout: ../../layouts/Blog.astro
+tags: ['Tech', 'Astro']
+---
+```
+
+`second.md` にタグを追加する
+
+```:markdown
+---
+title: 2つ目の記事
+layout: ../../layouts/Blog.astro
+tags: ['Tech', 'TypeScript', 'Blog']
+---
+```
+
+`pages` の下に `tags` ディレクトリを作成する。
+
+`tags`　の下に `index.astro` を作成する。
+
+```:html
+---
+const allBlogs = await Astro.glob("../blogs/*.md");
+const tags = [...new Set(allBlogs.map((post) => post.frontmatter.tags).flat())];
+---
+
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+    </head>
+    <body>
+        <main>
+            <h1>タグ一覧</h1>
+            <ul>
+                {
+                    tags.map((tag) => {
+                        return <li>{tag}</li>;
+                    })
+                }
+            </ul>
+        </main>
+    </body>
+</html>
+```
+
+# 15. タグで記事を絞り込んだページを作成する
+
+動的なパスは `[変数名].astro`  のファイル名でファイルを作るとできる。
+
+```:html
+---
+export async function getStaticPaths() {
+    const allBlogs = await Astro.glob("../blogs/*.md");
+    const tags = [
+        ...new Set(allBlogs.map((blog) => blog.frontmatter.tags).flat()),
+    ];
+    return tags.map((tag) => ({ params: { tag }, props: { blogs: allBlogs } }));
+}
+
+const { tag } = Astro.params;
+const { blogs } = Astro.props;
+const filterdBlogs = blogs.filter((blog) =>
+    blog.frontmatter.tags.includes(tag),
+);
+---
+
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+    </head>
+    <body>
+        <main>
+            <h1>タグ一覧</h1>
+            <ul>
+                {
+                    filterdBlogs.map((blog) => {
+                        return (
+                            <li>
+                                <a href={blog.url}>{blog.frontmatter.title}</a>
+                            </li>
+                        );
+                    })
+                }
+            </ul>
+        </main>
+    </body>
+</html>
+```
+
+`pages/tags/index.astro` を書き換えてタグで絞り込んだページに遷移できるようにする
+
+```:html
+---
+const allBlogs = await Astro.glob("../blogs/*.md");
+const tags = [...new Set(allBlogs.map((post) => post.frontmatter.tags).flat())];
+---
+
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+    </head>
+    <body>
+        <main>
+            <h1>タグ一覧</h1>
+            <ul>
+                {
+                    tags.map((tag) => {
+                        return (
+                            <li>
+                                <a href={`/tags/${tag}`}>{tag}</a>
+                            </li>
+                        );
+                    })
+                }
+            </ul>
+        </main>
+    </body>
+</html>
+```
+
+## 16. CSS フレームワークを追加してレイアウトを整える
+
+```:shell
+npx astro add tailwind
+```

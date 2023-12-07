@@ -1,7 +1,5 @@
 ---
-import Button from "../components/Button.astro";
-
-const buttonLabels: string[] = ["ボタン1", "ボタン2", "ボタン3"];
+const allBlogs = await Astro.glob("../pages/blogs/*.md");
 ---
 
 <html lang="en">
@@ -14,6 +12,10 @@ const buttonLabels: string[] = ["ボタン1", "ボタン2", "ボタン3"];
 	</head>
 	<body>
 		<h1>ブログ</h1>
-		{buttonLabels.map((label, idx) => <Button index={idx} label={label} />)}
+		{
+			allBlogs.map((blog) => {
+				return <a href={blog.url} style="display: block">{blog.frontmatter.title}</a>;
+			})
+		}
 	</body>
 </html>
