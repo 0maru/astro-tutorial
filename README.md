@@ -488,3 +488,32 @@ const tags = [...new Set(allBlogs.map((post) => post.frontmatter.tags).flat())];
 ```:shell
 npx astro add tailwind
 ```
+
+選択項目は 「Y」で進める
+
+```:html
+---
+const allBlogs = await Astro.glob("../pages/blogs/*.md");
+---
+
+<html lang="en">
+ <head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="generator" content={Astro.generator} />
+  <title>Astro</title>
+ </head>
+ <body>
+  <h1 class="text-2xl">ブログ</h1>
+  {
+   allBlogs.map((blog) => {
+    return <a href={blog.url} style="display: block" class="text-base mt-4">{blog.frontmatter.title}</a>;
+   })
+  }
+ </body>
+</html>
+```
+
+どんなutility cssがあるかはドキュメントを見てください。
+<https://tailwindcss.com/docs/installation>

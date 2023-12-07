@@ -11,10 +11,10 @@ const allBlogs = await Astro.glob("../pages/blogs/*.md");
 		<title>Astro</title>
 	</head>
 	<body>
-		<h1>ブログ</h1>
+		<h1 class="text-2xl">ブログ</h1>
 		{
 			allBlogs.map((blog) => {
-				return <a href={blog.url} style="display: block">{blog.frontmatter.title}</a>;
+				return <a href={blog.url} style="display: block" class="text-base mt-4">{blog.frontmatter.title}</a>;
 			})
 		}
 	</body>
